@@ -1,0 +1,105 @@
+.card-custom {
+  border-radius: 10px;
+  height: 124px;
+  position: relative;
+  transition: transform 0.3s, box-shadow 0.3s, border-color 0.3s;
+  overflow: hidden;
+  padding-bottom: 12px;
+  margin-bottom: 16px;
+}
+
+.card-body {
+  height: 100%;
+  overflow: hidden;
+}
+
+.card-title {
+  font-weight: bold;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.card-text {
+  height: 60px;
+  font-size: 13px;
+  text-overflow: ellipsis;
+}
+
+.card-custom:hover {
+  transform: translateY(-5px);
+  border-color: #007bff;
+  box-shadow: 0px 10px 20px rgba(0, 0, 0, 0.15);
+  background-color: rgb(225, 225, 225);
+  cursor: pointer;
+}
+
+.card-custom:hover .card-icons {
+  bottom: 10px;
+  opacity: 1;
+}
+
+.card-icons {
+  position: absolute;
+  bottom: -40px;
+  right: 10px;
+  display: flex;
+  transition: bottom 0.3s ease, opacity 0.3s ease;
+  opacity: 0;
+  z-index: 10;
+  gap: 2px;
+}
+
+.card-icons a {
+  cursor: pointer;
+  border-radius: 20%;
+  width: 30px;
+  height: 30px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background-color 0.3s;
+  color: black;
+}
+
+.card-icons .delete {
+  background-color: #f54e4e;
+  color: whitesmoke;
+}
+
+.col-md-3,
+.col-sm-6 {
+  padding-left: 8px;
+  padding-right: 8px;
+}
+
+.card-add {
+  overflow: hidden;
+  .card-body {
+    .card-title,
+    .card-text {
+      opacity: 0.4;
+    }
+    .add-button {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      font-size: 3rem;
+      color: rgb(138, 137, 137);
+      width: 60px;
+      height: 60px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: background-color 0.3s, box-shadow 0.3s;
+      :hover {
+        color: #007bff;
+      }
+    }
+  }
+}
+
+.selected {
+  background-color: rgb(225, 224, 224);
+}

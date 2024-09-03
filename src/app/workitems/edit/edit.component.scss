@@ -1,0 +1,134 @@
+.title-container {
+  width: 95%;
+  .title-input {
+    width: 100%;
+    padding-left: 2px;
+    padding-right: 2px;
+    &:hover {
+      outline: 1px solid #bdbcbc;
+      border-radius: 4px;
+    }
+  }
+}
+
+.description-container,
+.dates-container,
+.comments-container {
+  .description-header,
+  .dates-header,
+  .comments-header {
+    width: fit-content;
+    cursor: pointer;
+    .icon {
+      padding: 1px;
+      font-size: 8px;
+      background-color: #e4e4e4;
+      border-radius: 3px;
+      &:hover {
+        background-color: #c1c1c1;
+      }
+    }
+  }
+  .description-content {
+    flex: 1 1 auto;
+    overflow: hidden;
+    width: 95%;
+    .description-view-edit {
+      .view {
+        width: 97%;
+      }
+      .edit {
+        font-size: 10px;
+        cursor: pointer;
+        &:hover {
+          background-color: #f0f0f0;
+        }
+      }
+    }
+    .description-editor {
+      height: 250px;
+      flex: 1 1 auto;
+      overflow-y: auto;
+      border: 1px solid #ced4da;
+      border-radius: 0.25rem;
+    }
+  }
+  .hover-description:hover {
+    outline: 1px solid #bdbcbc;
+    border-radius: 4px;
+  }
+  .dates-content {
+    font-size: 12px;
+    .created,
+    .updated {
+      .text {
+        width: 10%;
+      }
+    }
+  }
+  .comments-content {
+    .single-comment {
+      .editor {
+        width: 100%;
+      }
+      .timestamp {
+        font-size: 11px;
+        margin-left: -12px;
+        cursor: pointer;
+        .icon {
+          padding: 1px;
+          margin-bottom: 3px;
+          font-size: 8px;
+          background-color: #e4e4e4;
+          border-radius: 3px;
+          &:hover {
+            background-color: #c1c1c1;
+          }
+        }
+        .dates {
+          width: 100%;
+        }
+      }
+      .text {
+        border: 1px solid #e3e4e4;
+        background-color: #e3e4e4;
+        border-radius: 4px;
+      }
+      .actions {
+        font-size: 12px;
+        .edit,
+        .delete {
+          cursor: pointer;
+          color: #007bff;
+          &:hover {
+            text-decoration: underline;
+          }
+        }
+        .delete {
+          color: #f54e4e;
+        }
+      }
+    }
+  }
+  .comments-action {
+    .add-comment-panel {
+      width: 100%;
+      .editor {
+        width: 100%;
+      }
+    }
+    .add-comment-button {
+      background-color: #c1c1c1;
+      &:hover {
+        background-color: #a8a8a8;
+      }
+    }
+  }
+}
+
+::ng-deep .ql-toolbar {
+  position: sticky;
+  top: 0;
+  z-index: 1;
+  background-color: white;
+}

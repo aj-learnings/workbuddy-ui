@@ -1,0 +1,152 @@
+<div class="container position-relative" [ngClass]="{'processing': updatingWorkItem}">
+  <button type="button" title="Close" class="btn-close position-absolute end-0 pe-3" aria-label="Close"
+    (click)="onClose()"></button>
+  <div class="title-container d-flex align-items-center">
+    <div *ngIf="!isTitleEditing; else updateTitleView" class="d-flex align-items-center">
+      <h5 class="title-input mt-3" (click)="editTitle()">
+        {{ titleControl.value }}
+      </h5>
+      <button class="btn btn-sm btn-link link-primary mt-2" (click)="editTitle()">
+        <i class="bi bi-pencil-fill"></i>
+      </button>
+    </div>
+    <ng-template #updateTitleView>
+      <div class="title-input mt-3">
+        <input class="form-control form-control-md fw-bold" #titleInput type="text" [formControl]="titleControl"
+          (keyup.enter)="saveTitle()" />
+      </div>
+      <button class="btn btn-sm btn-link link-success mt-3" (click)="saveTitle()">
+        <i class="bi bi-check-circle-fill"></i>
+      </button>
+    </ng-template>
+  </div>
+  <div class="description-container d-flex flex-column">
+    <div class="description-header d-flex align-items-center gap-1" (click)="descriptionExpansionHandler()">
+      <div class="icon">
+        <i *ngIf="!expandDescriptionSection" class="bi bi-chevron-right"></i>
+        <i *ngIf="expandDescriptionSection" class="bi bi-chevron-down"></i>
+      </div>
+      <div class="descrition-text fw-bold text-primary">
+        <small>Description</small>
+      </div>
+    </div>
+    <div class="description-content flex-grow-1 d-flex flex-column mb-1 ms-3" *ngIf="expandDescriptionSection"
+      [ngClass]="{'hover-description': !isDescriptionEditing}">
+      <div *ngIf="!isDescriptionEditing; else updateDescriptionView" class="description-view-edit d-flex"
+        (click)="openDescriptionEditor()">
+        <div class="view" [innerHTML]="descriptionControl.value"></div>
+        <div class="edit d-flex text-primary align-items-center p-1">
+          <div class="d-flex flex-column align-items-center">
+            <i class="bi bi-pencil-fill"></i>
+          </div>
+        </div>
+      </div>
+      <ng-template #updateDescriptionView>
+        <quill-editor class="description-editor" [formControl]="descriptionControl"
+          placeholder="Enter description"></quill-editor>
+        <div class="buttons d-flex gap-1 mt-1 justify-content-end">
+          <button type="button" class="btn btn-primary btn-sm" (click)="saveDescription()">Save</button>
+          <button type="button" class="btn btn-secondary btn-sm" (click)="closeDescriptionEditor()">Cancel</button>
+        </div>
+      </ng-template>
+    </div>
+  </div>
+  <div class="dates-container d-flex flex-column">
+    <div class="dates-header d-flex align-items-center gap-1" (click)="dateExpansionHandler()">
+      <div class="icon">
+        <i *ngIf="!expandDateSection" class="bi bi-chevron-right"></i>
+        <i *ngIf="expandDateSection" class="bi bi-chevron-down"></i>
+      </div>
+      <div class="descrition-text fw-bold text-primary">
+        <small>Dates</small>
+      </div>
+    </div>
+    <div class="dates-content d-flex flex-column ms-3" *ngIf="expandDateSection">
+      <div class="dates-content">
+        <div class="created d-flex">
+          <div class="text">Created</div>
+          <div class="fw-bold"><i>{{ workItem?.created | date: 'dd MMM yy, hh:mm a' }}</i></div>
+        </div>
+        <div class="updated d-flex">
+          <div class="text">Updated</div>
+          <div class="fw-bold"><i>{{ workItem?.updated | date: 'dd MMM yy, hh:mm a' }}</i></div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="comments-container d-flex flex-column mt-2">
+    <div class="comments-header d-flex align-items-center gap-1" (click)="commentsExpansionHandler()">
+      <div class="icon">
+        <i *ngIf="!expandCommentsSection" class="bi bi-chevron-right"></i>
+        <i *ngIf="expandCommentsSection" class="bi bi-chevron-down"></i>
+      </div>
+      <div class="comments-text fw-bold text-primary">
+        <small>Comments</small>
+      </div>
+    </div>
+    <div class="comments-content ms-3" *ngIf="expandCommentsSection">
+      <div *ngIf="!loadingComments; else commentLoader">
+        <div *ngIf="workItem?.comments?.length; else noCommentsSection" class="d-flex flex-column gap-2 mt-1">
+          <div *ngFor="let comment of workItem?.comments" class="single-comment">
+            <div *ngIf="comment.editing; else commentView">
+              <quill-editor class="editor" [(ngModel)]="newComment" placeholder="Enter comment"></quill-editor>
+              <div class="buttons d-flex gap-1 justify-content-end">
+                <button type="button" [disabled]="!newComment?.length" class="btn btn-primary btn-sm"
+                  (click)="saveComment(comment)">Save</button>
+                <button type="button" class="btn btn-secondary btn-sm"
+                  (click)="closeEditCommentPanel(comment)">Cancel</button>
+              </div>
+            </div>
+            <ng-template #commentView>
+              <div class="timestamp d-flex gap-1" (click)="toggleCommentExpansion(comment)">
+                <div class="icon">
+                  <i *ngIf="comment.notExpanded" class="bi bi-chevron-right"></i>
+                  <i *ngIf="!comment.notExpanded" class="bi bi-chevron-down"></i>
+                </div>
+                <div class="d-flex justify-content-between align-items-center dates">
+                  <div> Created - <i>{{ comment?.created | date: 'dd MMM yy, hh:mm a' }}</i> </div>
+                  <div> <i>{{ comment?.updated | date: 'dd MMM yy, hh:mm a' }}</i> - Updated </div>
+                </div>
+              </div>
+              <div class="text ps-1 pe-1" [innerHTML]="comment.text" *ngIf="!comment.notExpanded"></div>
+              <div class="actions d-flex gap-2" *ngIf="!comment.notExpanded">
+                <div class="edit" (click)="openEditCommentPanel(comment)"> Edit </div>
+                <div class="delete" (click)="deleteCommentHandler(comment)"> Delete </div>
+              </div>
+            </ng-template>
+            <hr class="my-1" />
+          </div>
+        </div>
+        <ng-template #noCommentsSection>
+          <div class="d-flex align-items-center">
+            <small>No comments to show.</small>
+          </div>
+        </ng-template>
+      </div>
+      <ng-template #commentLoader>
+        <div class="loader">
+          <div class="spinner-border spinner-border-sm" role="status">
+            <span class="visually-hidden">Loading...</span>
+          </div>
+        </div>
+      </ng-template>
+    </div>
+    <div class="comments-action ms-3 mt-2">
+      <div class="add-comment-panel" *ngIf="showAddCommentSection">
+        <quill-editor class="editor" [(ngModel)]="newComment" placeholder="Enter comment"></quill-editor>
+        <div class="buttons d-flex gap-1 justify-content-end">
+          <button type="button" [disabled]="!newComment?.length" class="btn btn-primary btn-sm"
+            (click)="addComment()">Add</button>
+          <button type="button" class="btn btn-secondary btn-sm" (click)="closeAddCommentPanel()">Cancel</button>
+        </div>
+        <hr class="my-1" />
+      </div>
+      <button type="button" class="add-comment-button btn btn-sm" (click)="openAddCommentPanel()">
+        Add comment
+      </button>
+    </div>
+  </div>
+</div>
+
+<app-confirmation [show]="showDeleteCommentSection" [confirmationDetails]="deleteConfirmationDetails"
+  (closeEmitter)="deleteConfirmHandler($event)"></app-confirmation>

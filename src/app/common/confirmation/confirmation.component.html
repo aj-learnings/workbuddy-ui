@@ -1,0 +1,26 @@
+<div class="modal" [ngClass]="{'show d-block': show}" tabindex="-1" role="dialog" *ngIf="show">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <div class="d-flex flex-column">
+          <h5 class="modal-title text-{{confirmationDetails.successClass}}" id="exampleModalLabel"> {{
+            confirmationDetails.heading }}</h5>
+          <div class="warning-message d-flex justify-content-center gap-1" *ngIf="confirmationDetails.warningMessage">
+            <i class="bi bi-exclamation-triangle-fill"></i>
+            <div> {{ confirmationDetails.warningMessage }} </div>
+          </div>
+        </div>
+        <button type="button" class="btn-close" aria-label="Close" (click)="close()"></button>
+      </div>
+      <div class="modal-body" [innerHTML]="confirmationDetails.message">
+      </div>
+      <div class="modal-footer">
+        <button type="button" data-bs-dismiss="modal" (click)="confirm()"
+          class="btn btn-{{confirmationDetails.successClass}}">
+          {{ confirmationDetails.successAction }}
+        </button>
+        <button type="button" class="btn btn-secondary" (click)="close()">Cancel</button>
+      </div>
+    </div>
+  </div>
+</div>

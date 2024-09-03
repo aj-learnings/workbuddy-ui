@@ -1,0 +1,30 @@
+.add-container {
+  height: calc(100vh - 70px);
+  .input-container {
+    flex: 0 1 auto;
+  }
+  .description-container {
+    flex: 1 1 auto;
+    overflow: hidden;
+    .description-editor {
+      flex: 1 1 auto;
+      overflow-y: auto;
+      border: 1px solid #ced4da;
+      border-radius: 0.25rem;
+    }
+  }
+  .action-container {
+    flex: 0 1 auto;
+  }
+}
+
+.title-input {
+  width: 95%;
+}
+
+::ng-deep .ql-toolbar {
+  position: sticky;
+  top: 0;
+  z-index: 1;
+  background-color: white;
+}

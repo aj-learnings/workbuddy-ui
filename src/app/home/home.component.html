@@ -1,0 +1,27 @@
+<div class="home-container">
+  <div> {{ temp }} </div>
+  <div *ngIf="!fetchingWorkItems; else showLoader" class="workitems">
+    <div class="flex-grow-1" [style.flex-basis.%]="leftPanelWidth" class="overflow-auto">
+      <app-workitems-list [workItems]="filteredWorkItems" [selectedWorkItem]="selectedWorkItem"
+        (itemClickedEmitter)="itemClickedHandler($event)" (deleteWorkItemEmitter)="deleteWorkItemHandler($event)">
+      </app-workitems-list>
+    </div>
+    <div class="vr"></div>
+    <div *ngIf="showAddItem" class="flex-grow-1" [style.flex-basis.%]="100 - leftPanelWidth" class="overflow-auto">
+      <app-workitem-add (addWorkItemEmitter)="addWorkItemHandler($event)"
+        (closeAddEmitter)="closeAddHandler()"></app-workitem-add>
+    </div>
+    <div *ngIf="showEditItem" class="flex-grow-1" [style.flex-basis.%]="100 - leftPanelWidth" class="overflow-auto">
+      <app-workitem-edit [workItem]="selectedWorkItem" (updatedWorkItemEmitter)="updateWorkItemHandler($event)"
+        (closeEditEmitter)="closeEditHandler()">
+      </app-workitem-edit>
+    </div>
+  </div>
+  <ng-template #showLoader>
+    <div class="loader">
+      <div class="spinner-grow" role="status">
+        <span class="visually-hidden">Loading...</span>
+      </div>
+    </div>
+  </ng-template>
+</div>

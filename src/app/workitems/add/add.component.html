@@ -1,0 +1,17 @@
+<div class="container d-flex flex-column position-relative add-container" [ngClass]="{'processing': addingWorkItem}">
+  <button type="button" title="Close" class="btn-close position-absolute end-0 pe-3" aria-label="Close"
+    (click)="onClose()"></button>
+  <form [formGroup]="form" (ngSubmit)="add()" class="d-flex flex-column flex-grow-1">
+    <div class="input-container mb-2 mt-3">
+      <input id="title" type="text" formControlName="title" class="form-control form-control-lg fw-bold title-input"
+        placeholder="Enter title" />
+    </div>
+    <div class="description-container mb-2 flex-grow-1 d-flex flex-column">
+      <quill-editor class="description-editor" formControlName="description"
+        placeholder="Enter description"></quill-editor>
+    </div>
+    <div class="action-container d-grid">
+      <button type="submit" [disabled]="form.invalid" class="btn btn-primary btn-md">Add Workitem</button>
+    </div>
+  </form>
+</div>
