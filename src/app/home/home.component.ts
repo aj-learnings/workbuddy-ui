@@ -60,7 +60,6 @@ export class HomeComponent implements OnInit {
         .getAllWorkItems()
         .subscribe({
           next: (response: WorkItemResponse[]) => {
-            console.log(response);
             this.workItems = response;
             this.filterWorkItems();
             this.fetchingWorkItems = false;
