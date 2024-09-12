@@ -10,6 +10,8 @@ import { CustomClickHandler } from '../types/custom-click-handler';
 import { SearchService } from '../services/shared/search.service';
 import { SearchDetails } from '../types/search-details';
 import { SearchType } from '../enums/search-type';
+import { AlertService } from '../services/shared/alert.service';
+import { AlertDetails } from '../types/alert-details';
 
 @Component({
   selector: 'app-home',
@@ -26,9 +28,16 @@ import { SearchType } from '../enums/search-type';
 export class HomeComponent implements OnInit {
 
   searchService = inject(SearchService);
+  alertService = inject(AlertService);
   workItemService = inject(WorkitemService);
 
   searchTextValue: string = '';
+  alertDetails: AlertDetails = {
+    title: '',
+    message: '',
+    class: '',
+    show: false
+  }
 
   fetchingWorkItems: boolean = false;
 
@@ -53,6 +62,11 @@ export class HomeComponent implements OnInit {
             this.filterWorkItems();
           }
     });
+    this.alertService
+        .alert$
+        .subscribe((alertDetails: AlertDetails) => {
+          this.alertDetails = alertDetails;
+        })
   }
 
   fetchAllWorkItems() {
@@ -120,5 +134,9 @@ export class HomeComponent implements OnInit {
     this.showEditItem = false;
     this.selectedWorkItem = undefined;
     this.leftPanelWidth = 100;
+  }
+
+  closeAlert() {
+    this.alertDetails.show = false;
   }
 }
