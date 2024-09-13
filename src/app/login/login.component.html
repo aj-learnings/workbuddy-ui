@@ -1,0 +1,35 @@
+<div class="modal" [ngClass]="{'show d-block': show}" tabindex="-1" role="dialog" *ngIf="show">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <div class="d-flex flex-column">
+            <div class="d-flex justify-content-center align-items-center">
+              <h5 class="modal-title text-dark" id="exampleModalLabel"> {{ registerUser ? 'Register' : 'Login' }} </h5>
+              <button type="button" class="btn btn-sm btn-link mt-1" *ngIf="!registerUser" (click)="newUser()">
+                <small>New user?</small>
+              </button>
+            </div>
+          </div>
+          <button type="button" class="btn-close" aria-label="Close" (click)="close()"></button>
+        </div>
+        <div class="modal-body">
+            <form>
+                <div class="form-floating mb-2">
+                    <input type="name" class="form-control" id="floatingInput" placeholder="Username">
+                    <label for="floatingInput">Username</label>
+                </div>
+                <div class="form-floating">
+                    <input type="password" class="form-control" id="floatingPassword" placeholder="Password">
+                    <label for="floatingPassword">Password</label>
+                </div>
+            </form>
+        </div>
+        <div class="modal-footer">
+          <button type="button" data-bs-dismiss="modal" class="btn btn-primary">
+            {{ registerUser ? 'Register' : 'Login' }}
+          </button>
+          <button type="button" class="btn btn-secondary" (click)="close()">Cancel</button>
+        </div>
+      </div>
+    </div>
+</div>

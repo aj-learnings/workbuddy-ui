@@ -3,15 +3,18 @@ import { FormControl, ReactiveFormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
 import { SearchService } from '../services/shared/search.service';
 import { SearchType } from '../enums/search-type';
+import { LoginComponent } from '../login/login.component';
 
 @Component({
   selector: 'app-navbar',
   standalone: true,
-  imports: [RouterModule, ReactiveFormsModule],
+  imports: [RouterModule, ReactiveFormsModule, LoginComponent],
   templateUrl: './navbar.component.html',
   styleUrl: './navbar.component.scss',
 })
 export class NavbarComponent implements OnInit {
+
+  showLoginSection: boolean = false;
 
   searchService = inject(SearchService);
 
@@ -23,6 +26,16 @@ export class NavbarComponent implements OnInit {
           .subscribe((value: string) => {
             this.searchService.publishSearchValue({ value: value, type: SearchType.WorkItemList });
           });
+  }
+
+  login() {
+    this.showLoginSection = true;
+  }
+
+  closeLoginSection(event: boolean) {
+    if (event) {
+      this.showLoginSection = false;
+    }
   }
 
 }
