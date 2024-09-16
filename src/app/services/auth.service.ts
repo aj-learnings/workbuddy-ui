@@ -17,7 +17,7 @@ export class AuthService {
 
   register(registerRequest: UserRegisterRequest): Observable<UserRegisterResponse> {
     return this.httpClient
-               .post<UserRegisterResponse>(`${environment.apiBaseUrl}/register`, registerRequest);
+               .post<UserRegisterResponse>(`${environment.apiBaseUrl}/signup`, registerRequest);
   }
 
   login(loginRequest: UserLoginRequest): Observable<UserLoginResponse> {

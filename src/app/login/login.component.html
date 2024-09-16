@@ -3,11 +3,15 @@
       <div class="modal-content">
         <div class="modal-header">
           <div class="d-flex flex-column">
-            <div class="d-flex justify-content-center align-items-center">
+            <div class="d-flex align-items-center">
               <h5 class="modal-title text-dark" id="exampleModalLabel"> {{ registerUser ? 'Register' : 'Login' }} </h5>
               <button type="button" class="btn btn-sm btn-link mt-1" *ngIf="!registerUser" (click)="newUser()">
                 <small>New user?</small>
               </button>
+            </div>
+            <div class="warning-message d-flex gap-1" *ngIf="errorMessage.length">
+              <i class="bi bi-exclamation-triangle-fill"></i>
+              <div> {{ errorMessage }} </div>
             </div>
           </div>
           <button type="button" class="btn-close" aria-label="Close" (click)="close()"></button>
@@ -29,7 +33,7 @@
             </form>
           </div>
         <div class="modal-footer">
-          <button type="submit" [disabled]="inputForm.invalid" data-bs-dismiss="modal" class="btn btn-primary">
+          <button type="submit" [disabled]="inputForm.invalid" data-bs-dismiss="modal" class="btn btn-primary" (click)="registerUser ? register() : login()">
             {{ registerUser ? 'Register' : 'Login' }}
           </button>
           <button type="button" class="btn btn-secondary" (click)="close()">Cancel</button>

@@ -13,13 +13,13 @@ export class AuthInterceptor implements HttpInterceptor  {
 
     if (isPlatformBrowser(this.platformId)) {
       try {
-        token = localStorage.getItem('authToken');
+        token = localStorage.getItem('token');
       } catch (error) {
         console.error('Error accessing localStorage:', error);
       }
     }
 
-    const requiresAuth = request.url.includes('/api/workbuddy/verify') || request.method !== 'GET';
+    const requiresAuth = (request.method !== 'GET' && !request.url.includes('login') && !request.url.includes('signup')) || (request.method === 'GET' && request.url.includes('verify'));
     if (requiresAuth && token) {
       request = request.clone({
         setHeaders: {
