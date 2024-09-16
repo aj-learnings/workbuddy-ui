@@ -6,7 +6,8 @@
       <span class="navbar-toggler-icon"></span>
     </button>
     <div class="collapse navbar-collapse justify-content-end align-items-center gap-2" id="navbarSupportedContent">
-      <button type="button" class="btn btn-outline-light" (click)="login()">Login</button>
+      <button *ngIf="showLoginButton" type="button" class="btn btn-outline-light" (click)="login()">Login</button>
+      <div *ngIf="!showLoginButton" class="text-light"> {{ userName }} </div>
       <form class="d-flex w-25">
         <input class="form-control" [formControl]="searchControl" type="search" placeholder="Search" aria-label="Search">
       </form>

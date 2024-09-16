@@ -19,7 +19,7 @@ export class AuthInterceptor implements HttpInterceptor  {
       }
     }
 
-    const requiresAuth = request.url.includes('/api/workbuddy/verify') && request.method !== 'GET';
+    const requiresAuth = request.url.includes('/api/workbuddy/verify') || request.method !== 'GET';
     if (requiresAuth && token) {
       request = request.clone({
         setHeaders: {

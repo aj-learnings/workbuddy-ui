@@ -12,6 +12,9 @@ import { SearchDetails } from '../types/search-details';
 import { SearchType } from '../enums/search-type';
 import { AlertService } from '../services/shared/alert.service';
 import { AlertDetails } from '../types/alert-details';
+import { AuthService } from '../services/auth.service';
+import { VerifyUserResponse } from '../types/verify-user-response';
+import { UserService } from '../services/shared/user.service';
 
 @Component({
   selector: 'app-home',
@@ -30,6 +33,8 @@ export class HomeComponent implements OnInit {
   searchService = inject(SearchService);
   alertService = inject(AlertService);
   workItemService = inject(WorkitemService);
+  authService = inject(AuthService);
+  userService = inject(UserService);
 
   searchTextValue: string = '';
   alertDetails: AlertDetails = {
@@ -53,6 +58,7 @@ export class HomeComponent implements OnInit {
 
   ngOnInit(): void {
     this.fetchingWorkItems = true;
+    this.verify();
     this.fetchAllWorkItems();
     this.searchService
         .search$
@@ -66,7 +72,7 @@ export class HomeComponent implements OnInit {
         .alert$
         .subscribe((alertDetails: AlertDetails) => {
           this.alertDetails = alertDetails;
-        })
+        });
   }
 
   fetchAllWorkItems() {
@@ -83,6 +89,21 @@ export class HomeComponent implements OnInit {
             console.log(error);
           },
         });
+  }
+
+  verify() {
+    this.authService
+        .verify()
+        .subscribe({
+          next: (response: VerifyUserResponse) => {
+            this.userService
+                .publishUserDetails({ loggedIn: true, userName: response.userName });
+          },
+          error: (error) => {
+            this.userService
+                .publishUserDetails({ loggedIn: false, userName: '' });
+          }
+        })
   }
 
   itemClickedHandler(event: CustomClickHandler) {
