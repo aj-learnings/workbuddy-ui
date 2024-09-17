@@ -15,6 +15,7 @@ import { AlertDetails } from '../types/alert-details';
 import { AuthService } from '../services/auth.service';
 import { VerifyUserResponse } from '../types/verify-user-response';
 import { UserService } from '../services/shared/user.service';
+import { UserDetails } from '../types/user-details';
 
 @Component({
   selector: 'app-home',
@@ -43,6 +44,7 @@ export class HomeComponent implements OnInit {
     class: '',
     show: false
   }
+  userDetails?: UserDetails;
 
   fetchingWorkItems: boolean = false;
 
@@ -60,6 +62,11 @@ export class HomeComponent implements OnInit {
     this.fetchingWorkItems = true;
     this.verify();
     this.fetchAllWorkItems();
+    this.userService
+        .user$
+        .subscribe((userDetails: UserDetails) => {
+          this.userDetails = userDetails;
+        });
     this.searchService
         .search$
         .subscribe((searchDetails: SearchDetails) => {
@@ -67,7 +74,7 @@ export class HomeComponent implements OnInit {
             this.searchTextValue = searchDetails.value.trim();
             this.filterWorkItems();
           }
-    });
+        });
     this.alertService
         .alert$
         .subscribe((alertDetails: AlertDetails) => {

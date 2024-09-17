@@ -14,6 +14,8 @@ import { UpdateComment } from '../../types/comment-update';
 import { ConfirmationDetails } from '../../types/confirmation-details';
 import { ConfirmResponse } from '../../types/confirm-response';
 import { ConfirmationComponent } from '../../common/confirmation/confirmation.component';
+import { AlertService } from '../../services/shared/alert.service';
+import { UserDetails } from '../../types/user-details';
 
 @Component({
   selector: 'app-workitem-edit',
@@ -27,8 +29,10 @@ export class EditComponent implements OnChanges {
 
   workItemService = inject(WorkitemService);
   commentService = inject(CommentService);
+  alertService = inject(AlertService);
 
   @Input() workItem?: WorkItem;
+  @Input() userDetails?: UserDetails;
   @Output() closeEditEmitter = new EventEmitter();
   @Output() updatedWorkItemEmitter = new EventEmitter<WorkItem>();
 
@@ -100,6 +104,9 @@ export class EditComponent implements OnChanges {
   }
 
   editTitle() {
+    if (this.workItem?.createdBy !== this.userDetails?.userName) {
+      return;
+    }
     this.isTitleEditing = true;
     setTimeout(() => {
       if (this.titleInput) {
@@ -121,6 +128,9 @@ export class EditComponent implements OnChanges {
   }
 
   openDescriptionEditor() {
+    if (this.workItem?.createdBy !== this.userDetails?.userName) {
+      return;
+    }
     this.isDescriptionEditing = true;
   }
 
@@ -158,6 +168,16 @@ export class EditComponent implements OnChanges {
   }
 
   openAddCommentPanel() {
+    if (!this.userDetails?.loggedIn) {
+      this.alertService
+          .publishAlertValue({ 
+            title: 'Oops!', 
+            message: `Please login to add a comment`, 
+            class: 'danger', 
+            show: true 
+          });
+      return;
+    }
     this.showAddCommentSection = true;
   }
   

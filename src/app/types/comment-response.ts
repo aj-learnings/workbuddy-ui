@@ -4,4 +4,5 @@ export type CommentResponse = {
     text: string;
     created: string;
     updated: string;
+    createdBy: string;
 }

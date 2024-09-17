@@ -3,10 +3,11 @@
     (click)="onClose()"></button>
   <div class="title-container d-flex align-items-center">
     <div *ngIf="!isTitleEditing; else updateTitleView" class="d-flex align-items-center">
-      <h5 class="title-input mt-3" (click)="editTitle()">
+      <h5 class="title-input mt-3" (click)="editTitle()"
+        [ngClass]="{'hover-title': !isTitleEditing && workItem?.createdBy === userDetails?.userName}">
         {{ titleControl.value }}
       </h5>
-      <button class="btn btn-sm btn-link link-primary mt-2" (click)="editTitle()">
+      <button class="btn btn-sm btn-link link-primary mt-2" *ngIf="workItem?.createdBy === userDetails?.userName" (click)="editTitle()">
         <i class="bi bi-pencil-fill"></i>
       </button>
     </div>
@@ -31,11 +32,11 @@
       </div>
     </div>
     <div class="description-content flex-grow-1 d-flex flex-column mb-1 ms-3" *ngIf="expandDescriptionSection"
-      [ngClass]="{'hover-description': !isDescriptionEditing}">
+      [ngClass]="{'hover-description': !isDescriptionEditing && workItem?.createdBy === userDetails?.userName}">
       <div *ngIf="!isDescriptionEditing; else updateDescriptionView" class="description-view-edit d-flex"
         (click)="openDescriptionEditor()">
         <div class="view" [innerHTML]="descriptionControl.value"></div>
-        <div class="edit d-flex text-primary align-items-center p-1">
+        <div class="edit d-flex text-primary align-items-center p-1" *ngIf="workItem?.createdBy === userDetails?.userName">
           <div class="d-flex flex-column align-items-center">
             <i class="bi bi-pencil-fill"></i>
           </div>
@@ -110,8 +111,8 @@
               </div>
               <div class="text ps-1 pe-1" [innerHTML]="comment.text" *ngIf="!comment.notExpanded"></div>
               <div class="actions d-flex gap-2" *ngIf="!comment.notExpanded">
-                <div class="edit" (click)="openEditCommentPanel(comment)"> Edit </div>
-                <div class="delete" (click)="deleteCommentHandler(comment)"> Delete </div>
+                <div class="edit" *ngIf="comment.createdBy === this.userDetails?.userName" (click)="openEditCommentPanel(comment)"> Edit </div>
+                <div class="delete" *ngIf="comment.createdBy === this.userDetails?.userName" (click)="deleteCommentHandler(comment)"> Delete </div>
               </div>
             </ng-template>
             <hr class="my-1" />

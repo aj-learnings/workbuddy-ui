@@ -21,8 +21,8 @@
         (closeAddEmitter)="closeAddHandler()"></app-workitem-add>
     </div>
     <div *ngIf="showEditItem" class="flex-grow-1" [style.flex-basis.%]="100 - leftPanelWidth" class="overflow-auto">
-      <app-workitem-edit [workItem]="selectedWorkItem" (updatedWorkItemEmitter)="updateWorkItemHandler($event)"
-        (closeEditEmitter)="closeEditHandler()">
+      <app-workitem-edit [workItem]="selectedWorkItem" [userDetails]="userDetails"
+        (updatedWorkItemEmitter)="updateWorkItemHandler($event)" (closeEditEmitter)="closeEditHandler()">
       </app-workitem-edit>
     </div>
   </div>
