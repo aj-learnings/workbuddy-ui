@@ -1,11 +1,14 @@
 import { CommonModule } from '@angular/common';
-import { Component, EventEmitter, inject, Input, OnChanges, Output, SimpleChanges } from '@angular/core';
+import { Component, EventEmitter, inject, Input, OnChanges, OnInit, Output, SimpleChanges } from '@angular/core';
 import { WorkItem } from '../../types/workitem';
 import { CustomClickHandler } from '../../types/custom-click-handler';
 import { ConfirmationComponent } from "../../common/confirmation/confirmation.component";
 import { ConfirmationDetails } from '../../types/confirmation-details';
 import { WorkitemService } from '../../services/workitem.service';
 import { ConfirmResponse } from '../../types/confirm-response';
+import { AlertService } from '../../services/shared/alert.service';
+import { UserService } from '../../services/shared/user.service';
+import { UserDetails } from '../../types/user-details';
 
 @Component({
   selector: 'app-workitems-list',
@@ -14,11 +17,13 @@ import { ConfirmResponse } from '../../types/confirm-response';
   templateUrl: './view.component.html',
   styleUrl: './view.component.scss'
 })
-export class ViewComponent implements OnChanges {
+export class ViewComponent implements OnInit, OnChanges {
 
   constructor() {}
 
   workItemService = inject(WorkitemService);
+  alertService = inject(AlertService);
+  userService = inject(UserService);
 
   @Input() workItems: WorkItem[] = [];
   @Input() selectedWorkItem?: WorkItem;
@@ -35,6 +40,15 @@ export class ViewComponent implements OnChanges {
   }
   showDeleteWorkItemSection: boolean = false;
   deletingWorkItem: boolean = false;
+  userDetails?: UserDetails;
+
+  ngOnInit(): void {
+    this.userService
+        .user$
+        .subscribe((userDetails: UserDetails) => {
+          this.userDetails = userDetails;
+        });
+  }
 
   ngOnChanges(changes: SimpleChanges): void {
   }
@@ -54,6 +68,16 @@ export class ViewComponent implements OnChanges {
   }
 
   addItemHandler() {
+    if (!this.userDetails?.loggedIn) {
+      this.alertService
+          .publishAlertValue({ 
+            title: 'Oops!', 
+            message: `Please login to add a workitem`, 
+            class: 'danger', 
+            show: true 
+          });
+      return;
+    }
     this.itemClickedEmitter.emit({ exist: false })
   }
 

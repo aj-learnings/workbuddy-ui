@@ -5,4 +5,5 @@ export type WorkItemResponse = {
     type: string;
     created: string;
     updated: string;
+    createdBy: string;
 }

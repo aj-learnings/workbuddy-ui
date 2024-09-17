@@ -7,6 +7,7 @@ import { WorkitemService } from '../../services/workitem.service';
 import { WorkItemResponse } from '../../types/workitem-response';
 import { CommonModule } from '@angular/common';
 import { WorkItem } from '../../types/workitem';
+import { AlertService } from '../../services/shared/alert.service';
 
 @Component({
   selector: 'app-workitem-add',
@@ -18,6 +19,7 @@ import { WorkItem } from '../../types/workitem';
 export class AddComponent {
 
   workItemService = inject(WorkitemService);
+  alertService = inject(AlertService);
 
   addingWorkItem: boolean = false;
 
@@ -45,12 +47,19 @@ export class AddComponent {
           next: (response: WorkItemResponse) => {
             this.addingWorkItem = false;
             this.addWorkItemEmitter.emit(response);
+            this.alertService
+                .publishAlertValue({ 
+                  title: 'Awesome!', 
+                  message: 'Work item has been added', 
+                  class: 'success', 
+                  show: true 
+                });
           },
           error: (error) => {
             this.addingWorkItem = false;
             console.log(error);
           }
-        })
+        });
   }
 
   onClose() {
