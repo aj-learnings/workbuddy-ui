@@ -16,6 +16,7 @@ import { ConfirmResponse } from '../../types/confirm-response';
 import { ConfirmationComponent } from '../../common/confirmation/confirmation.component';
 import { AlertService } from '../../services/shared/alert.service';
 import { UserDetails } from '../../types/user-details';
+import { ErrorHandlerService } from '../../services/error-handler.service';
 
 @Component({
   selector: 'app-workitem-edit',
@@ -30,6 +31,7 @@ export class EditComponent implements OnChanges {
   workItemService = inject(WorkitemService);
   commentService = inject(CommentService);
   alertService = inject(AlertService);
+  errorHandlerService = inject(ErrorHandlerService);
 
   @Input() workItem?: WorkItem;
   @Input() userDetails?: UserDetails;
@@ -82,7 +84,8 @@ export class EditComponent implements OnChanges {
             this.updatingWorkItem = false;
           }, error: (error) => {
             this.updatingWorkItem = false;
-            console.log(error);
+            this.errorHandlerService
+                .handleError(error.error);
           }
         });
   }
@@ -96,9 +99,9 @@ export class EditComponent implements OnChanges {
             this.workItem!.comments = response;
             this.loadingComments = false;
           }, error: (error) => {
-            console.log(error);
             this.loadingComments = false;
-            console.log(error);
+            this.errorHandlerService
+                .handleError(error.error);
           }
         });
   }
@@ -201,7 +204,8 @@ export class EditComponent implements OnChanges {
             this.updatingWorkItem = false;
           }, error: (error) => {
             this.updatingWorkItem = false;
-            console.log(error);
+            this.errorHandlerService
+                .handleError(error.error);
           }
         });
   }
@@ -237,7 +241,8 @@ export class EditComponent implements OnChanges {
             this.updatingWorkItem = false;
           }, error: (error) => {
             this.updatingWorkItem = false;
-            console.log(error);
+            this.errorHandlerService
+                .handleError(error.error);
           }
         });
   }
@@ -272,7 +277,8 @@ export class EditComponent implements OnChanges {
             this.updatingWorkItem = false;
           }, error: (error) => {
             this.updatingWorkItem = false;
-            console.log(error);
+            this.errorHandlerService
+                .handleError(error.error);
           }
         });
   }

@@ -16,6 +16,7 @@ import { AuthService } from '../services/auth.service';
 import { VerifyUserResponse } from '../types/verify-user-response';
 import { UserService } from '../services/shared/user.service';
 import { UserDetails } from '../types/user-details';
+import { ErrorHandlerService } from '../services/error-handler.service';
 
 @Component({
   selector: 'app-home',
@@ -36,6 +37,7 @@ export class HomeComponent implements OnInit {
   workItemService = inject(WorkitemService);
   authService = inject(AuthService);
   userService = inject(UserService);
+  errorHandlerService = inject(ErrorHandlerService);
 
   searchTextValue: string = '';
   alertDetails: AlertDetails = {
@@ -93,7 +95,8 @@ export class HomeComponent implements OnInit {
           },
           error: (error) => {
             this.fetchingWorkItems = false;
-            console.log(error);
+            this.errorHandlerService
+                .handleError(error.error);
           },
         });
   }

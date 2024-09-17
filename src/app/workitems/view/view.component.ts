@@ -9,6 +9,7 @@ import { ConfirmResponse } from '../../types/confirm-response';
 import { AlertService } from '../../services/shared/alert.service';
 import { UserService } from '../../services/shared/user.service';
 import { UserDetails } from '../../types/user-details';
+import { ErrorHandlerService } from '../../services/error-handler.service';
 
 @Component({
   selector: 'app-workitems-list',
@@ -24,6 +25,7 @@ export class ViewComponent implements OnInit, OnChanges {
   workItemService = inject(WorkitemService);
   alertService = inject(AlertService);
   userService = inject(UserService);
+  errorHandlerService = inject(ErrorHandlerService);
 
   @Input() workItems: WorkItem[] = [];
   @Input() selectedWorkItem?: WorkItem;
@@ -95,7 +97,8 @@ export class ViewComponent implements OnInit, OnChanges {
             this.deletingWorkItem = false;
           }, error: (error) => {
             this.deletingWorkItem = false;
-            console.log(error);
+            this.errorHandlerService
+                .handleError(error.error);
           }
         })
   }

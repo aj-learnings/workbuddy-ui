@@ -8,6 +8,7 @@ import { WorkItemResponse } from '../../types/workitem-response';
 import { CommonModule } from '@angular/common';
 import { WorkItem } from '../../types/workitem';
 import { AlertService } from '../../services/shared/alert.service';
+import { ErrorHandlerService } from '../../services/error-handler.service';
 
 @Component({
   selector: 'app-workitem-add',
@@ -20,6 +21,7 @@ export class AddComponent {
 
   workItemService = inject(WorkitemService);
   alertService = inject(AlertService);
+  errorHandlerService = inject(ErrorHandlerService);
 
   addingWorkItem: boolean = false;
 
@@ -57,7 +59,8 @@ export class AddComponent {
           },
           error: (error) => {
             this.addingWorkItem = false;
-            console.log(error);
+            this.errorHandlerService
+                .handleError(error.error);
           }
         });
   }
