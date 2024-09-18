@@ -5,5 +5,5 @@ export type ErrorResponse = {
     statusName: string;
     path: string;
     method: string;
-    timestamp: Date;
+    timestamp: string;
 }

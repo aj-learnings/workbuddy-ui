@@ -105,8 +105,8 @@
                   <i *ngIf="!comment.notExpanded" class="bi bi-chevron-down"></i>
                 </div>
                 <div class="d-flex justify-content-between align-items-center dates">
-                  <div> Created - <i>{{ comment?.created | date: 'dd MMM yy, hh:mm a' }}</i> </div>
-                  <div> <i>{{ comment?.updated | date: 'dd MMM yy, hh:mm a' }}</i> - Updated </div>
+                  <div> Added at <i>{{ comment?.created | date: 'dd MMM yy, hh:mm a' }}</i> by <strong>{{comment?.createdBy }}</strong> </div>
+                  <div> <i>{{ comment?.updated | date: 'dd MMM yy, hh:mm a' }}</i> - Edited </div>
                 </div>
               </div>
               <div class="text ps-1 pe-1" [innerHTML]="comment.text" *ngIf="!comment.notExpanded"></div>
