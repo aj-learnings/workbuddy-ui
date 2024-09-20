@@ -18,6 +18,10 @@ import { AlertService } from '../../services/shared/alert.service';
 import { UserDetails } from '../../types/user-details';
 import { ErrorHandlerService } from '../../services/error-handler.service';
 import { UserReactions } from '../../enums/user-reactions';
+import { UserReactionService } from '../../services/user-reaction.service';
+import { CreateUserReaction } from '../../types/user-reaction-create';
+import { UserReactionResponse } from '../../types/user-reaction-response';
+import { UpdateUserReaction } from '../../types/user-reaction-update';
 
 @Component({
   selector: 'app-workitem-edit',
@@ -31,6 +35,7 @@ export class EditComponent implements OnChanges {
 
   workItemService = inject(WorkitemService);
   commentService = inject(CommentService);
+  userReactionService = inject(UserReactionService);
   alertService = inject(AlertService);
   errorHandlerService = inject(ErrorHandlerService);
 
@@ -302,6 +307,96 @@ export class EditComponent implements OnChanges {
             this.updatedWorkItemEmitter.emit(this.workItem);
             this.updatingWorkItem = false;
           }, error: (error) => {
+            this.updatingWorkItem = false;
+            this.errorHandlerService
+                .handleError(error.error);
+          }
+        });
+  }
+
+  userReaction(userReaction: UserReactions, comment: Comment) {
+    if (!this.userDetails?.loggedIn) {
+      this.alertService
+          .publishAlertValue({ 
+            title: 'Oops!', 
+            message: `Please login to ${userReaction} a comment`, 
+            class: 'danger', 
+            show: true 
+          });
+      return;
+    }
+    if (userReaction === comment.reaction) {
+      this.deleteUserReaction(comment);
+    } else if (comment.reaction === UserReactions.None) {
+      this.addUserReactionForComment(userReaction, comment);
+    } else {
+      this.updateUserReaction(userReaction, comment)
+    }
+  }
+
+  addUserReactionForComment(userReaction: UserReactions, comment: Comment) {
+    this.updatingWorkItem = true;
+    const createUserReaction: CreateUserReaction = {
+      isLiked: userReaction === UserReactions.Like ? true : false,
+    };
+    this.userReactionService
+        .addUserReactionForComment(comment.id, createUserReaction)
+        .subscribe({
+          next: (response: UserReactionResponse) => {
+            comment.userReactions.push(response);
+            comment.reaction = userReaction;
+            comment.likes += response.isLiked ? 1 : 0;
+            comment.dislikes += response.isLiked ? 0 : 1;
+            comment.reactionId = response.id;
+            this.updatingWorkItem = false;
+          },
+          error: (error) => {
+            this.updatingWorkItem = false;
+            this.errorHandlerService
+                .handleError(error.error);
+          }
+        });
+  }
+
+  updateUserReaction(userReaction: UserReactions, comment: Comment) {
+    this.updatingWorkItem = true;
+    const updateUserReaction: UpdateUserReaction = {
+      isLiked: userReaction === UserReactions.Like ? true : false,
+    };
+    this.userReactionService
+        .updateUserReaction(comment.reactionId ?? '', updateUserReaction)
+        .subscribe({
+          next: (response: UserReactionResponse) => {
+            const index = comment.userReactions.findIndex(userReaction => userReaction.id === comment.reactionId);
+            comment.userReactions[index] = response;
+            comment.reaction = userReaction;
+            comment.likes += response.isLiked ? 1 : -1;
+            comment.dislikes += response.isLiked ? -1 : 1;
+            comment.reactionId = response.id;
+            this.updatingWorkItem = false;
+          },
+          error: (error) => {
+            this.updatingWorkItem = false;
+            this.errorHandlerService
+                .handleError(error.error);
+          }
+        });
+  }
+
+  deleteUserReaction(comment: Comment) {
+    this.updatingWorkItem = true;
+    this.userReactionService
+        .deleteUserReaction(comment.reactionId ?? '')
+        .subscribe({
+          next: (response: boolean) => {
+            comment.userReactions = comment.userReactions.filter(userReaction => userReaction.id !== comment.reactionId);
+            comment.likes -= comment.reaction === UserReactions.Like ? 1 : 0;
+            comment.dislikes -= comment.reaction === UserReactions.DisLike ? 1 : 0;
+            comment.reactionId = undefined;
+            comment.reaction = UserReactions.None;
+            this.updatingWorkItem = false;
+          },
+          error: (error) => {
             this.updatingWorkItem = false;
             this.errorHandlerService
                 .handleError(error.error);
