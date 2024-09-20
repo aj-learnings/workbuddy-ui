@@ -95,7 +95,20 @@
         border-radius: 4px;
       }
       .actions {
+        margin-top: 2px;
         font-size: 12px;
+        .like, .dislike {
+          cursor: pointer;
+          padding-left: 4px;
+          padding-right: 4px;
+          &:hover {
+            background-color: #d3d2d2;
+            border-radius: 4px;
+          }
+        }
+        .like {
+          color: #007bff;
+        }
         .edit,
         .delete {
           cursor: pointer;

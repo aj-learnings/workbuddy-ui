@@ -7,5 +7,5 @@ export type Comment = CommentResponse & {
     reaction: UserReactions;
     likes: number;
     dislikes: number;
-    ractionId?: string;
+    reactionId?: string;
 }

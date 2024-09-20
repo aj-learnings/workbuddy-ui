@@ -17,6 +17,7 @@ import { ConfirmationComponent } from '../../common/confirmation/confirmation.co
 import { AlertService } from '../../services/shared/alert.service';
 import { UserDetails } from '../../types/user-details';
 import { ErrorHandlerService } from '../../services/error-handler.service';
+import { UserReactions } from '../../enums/user-reactions';
 
 @Component({
   selector: 'app-workitem-edit',
@@ -39,6 +40,8 @@ export class EditComponent implements OnChanges {
   @Output() updatedWorkItemEmitter = new EventEmitter<WorkItem>();
 
   @ViewChild('titleInput') titleInput!: ElementRef;
+
+  userReactions = UserReactions;
 
   updatingWorkItem: boolean = false;
 
@@ -96,7 +99,20 @@ export class EditComponent implements OnChanges {
         .getAllCommentsPerWorkItem(this.workItem?.id ?? '')
         .subscribe({
           next: (response: CommentResponse[]) => {
-            this.workItem!.comments = response;
+            const comments: Comment[] = [];
+            response.forEach(comment => {
+              const modifiedComment = comment as Comment;
+              modifiedComment.reaction = UserReactions.None;
+              modifiedComment.likes = comment.userReactions.filter(reaction => reaction.isLiked).length;
+              modifiedComment.dislikes = comment.userReactions.length - modifiedComment.likes;
+              const currentUserReaction = comment.userReactions.find(reaction => reaction.reactedBy === this.userDetails?.userName);
+              if (currentUserReaction) {
+                modifiedComment.reaction = currentUserReaction.isLiked ? UserReactions.Like : UserReactions.DisLike;
+                modifiedComment.reactionId = currentUserReaction.id;
+              }
+              comments.push(modifiedComment);
+            });
+            this.workItem!.comments = comments;
             this.loadingComments = false;
           }, error: (error) => {
             this.loadingComments = false;
@@ -196,7 +212,11 @@ export class EditComponent implements OnChanges {
         .addComment(this.workItem?.id ?? '', createComment)
         .subscribe({
           next: (response: CommentResponse) => {
-            this.workItem!.comments?.push(response);
+            const newComment = response as Comment;
+            newComment.reaction = UserReactions.None;
+            newComment.likes = newComment.dislikes = 0;
+            newComment.userReactions = response.userReactions ?? [];
+            this.workItem!.comments?.push(newComment);
             this.workItem!.updated = response.updated;
             this.newComment = '';
             this.closeAddCommentPanel();
@@ -233,8 +253,14 @@ export class EditComponent implements OnChanges {
         .subscribe({
           next: (response: CommentResponse) => {
             this.closeEditCommentPanel(comment);
+            const modifiedComment = response as Comment;
+            modifiedComment.reaction = comment.reaction;
+            modifiedComment.likes = comment.likes;
+            modifiedComment.dislikes = comment.dislikes;
+            modifiedComment.reactionId = comment.reactionId;
+            modifiedComment.userReactions = comment.userReactions;
             const index = this.workItem?.comments?.findIndex(comment => comment.id === response.id);
-            this.workItem!.comments![index!] = response;
+            this.workItem!.comments![index!] = modifiedComment;
             this.workItem!.updated = response.updated;
             this.newComment = '';
             this.updatedWorkItemEmitter.emit(this.workItem);
