@@ -1,3 +1,5 @@
+import { UserReactionResponse } from "./user-reaction-response";
+
 export type CommentResponse = {
     id: string;
     type: string;
@@ -5,4 +7,5 @@ export type CommentResponse = {
     created: string;
     updated: string;
     createdBy: string;
+    userReactions: UserReactionResponse[]
 }
