@@ -36,7 +36,7 @@ export class NavbarComponent implements OnInit {
         .user$
         .subscribe((userDetails: UserDetails) => {
           this.showLoginButton = !userDetails.loggedIn;
-          this.userName = userDetails.userName ?? '';
+          this.userName = userDetails.username ?? '';
         });
   }
 

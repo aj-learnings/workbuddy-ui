@@ -31,7 +31,8 @@ export class LoginComponent {
     private formBuilder: FormBuilder,
   ) {
     this.inputForm = this.formBuilder.group({
-      userName: new FormControl('', [Validators.required]),
+      username: new FormControl('', [Validators.required]),
+      email: new FormControl('', [Validators.email]),
       password: new FormControl('', [Validators.required]),
     });
   }
@@ -45,7 +46,8 @@ export class LoginComponent {
 
   register() {
     const userRegisterRequest: UserRegisterRequest = {
-      userName: this.inputForm.get('userName')?.value ?? '',
+      username: this.inputForm.get('username')?.value ?? '',
+      email: this.inputForm.get('email')?.value ?? '',
       password: this.inputForm.get('password')?.value ?? '',
     };
     this.authService
@@ -56,7 +58,7 @@ export class LoginComponent {
             this.alertService
                 .publishAlertValue({ 
                   title: 'Awesome!', 
-                  message: `User ${response.userName} has been registered`, 
+                  message: `User ${response.username} has been registered`, 
                   class: 'success', 
                   show: true 
                 });
@@ -69,7 +71,7 @@ export class LoginComponent {
 
   login() {
     const userLoginRequest: UserLoginRequest = {
-      userName: this.inputForm.get('userName')?.value ?? '',
+      usernameOrEmail: this.inputForm.get('username')?.value ?? '',
       password: this.inputForm.get('password')?.value ?? '',
     };
     this.authService
@@ -78,7 +80,10 @@ export class LoginComponent {
           next: (response: UserLoginResponse) => {
             localStorage.setItem('token', response.token);
             this.userService
-                .publishUserDetails({ loggedIn: true, userName: userLoginRequest.userName });
+                .publishUserDetails({ 
+                  loggedIn: true, 
+                  username: response.username,
+                  isVerified: response.isVerified });
             this.close();
             this.alertService
                 .publishAlertValue({ 

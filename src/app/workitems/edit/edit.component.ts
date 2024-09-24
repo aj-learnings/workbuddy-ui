@@ -110,7 +110,7 @@ export class EditComponent implements OnChanges {
               modifiedComment.reaction = UserReactions.None;
               modifiedComment.likes = comment.userReactions.filter(reaction => reaction.isLiked).length;
               modifiedComment.dislikes = comment.userReactions.length - modifiedComment.likes;
-              const currentUserReaction = comment.userReactions.find(reaction => reaction.reactedBy === this.userDetails?.userName);
+              const currentUserReaction = comment.userReactions.find(reaction => reaction.reactedBy === this.userDetails?.username);
               if (currentUserReaction) {
                 modifiedComment.reaction = currentUserReaction.isLiked ? UserReactions.Like : UserReactions.DisLike;
                 modifiedComment.reactionId = currentUserReaction.id;
@@ -128,7 +128,7 @@ export class EditComponent implements OnChanges {
   }
 
   editTitle() {
-    if (this.workItem?.createdBy !== this.userDetails?.userName) {
+    if (this.workItem?.createdBy !== this.userDetails?.username) {
       return;
     }
     this.isTitleEditing = true;
@@ -152,7 +152,7 @@ export class EditComponent implements OnChanges {
   }
 
   openDescriptionEditor() {
-    if (this.workItem?.createdBy !== this.userDetails?.userName) {
+    if (this.workItem?.createdBy !== this.userDetails?.username) {
       return;
     }
     this.isDescriptionEditing = true;

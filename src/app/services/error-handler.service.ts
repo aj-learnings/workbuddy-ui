@@ -19,7 +19,7 @@ export class ErrorHandlerService {
         this.userService
             .publishUserDetails({
               loggedIn: false,
-              userName: '',
+              username: '',
             });
         this.alertService
             .publishAlertValue({ 

@@ -107,11 +107,15 @@ export class HomeComponent implements OnInit {
         .subscribe({
           next: (response: VerifyUserResponse) => {
             this.userService
-                .publishUserDetails({ loggedIn: true, userName: response.userName });
+                .publishUserDetails({ 
+                  loggedIn: true, 
+                  username: response.username,
+                  isVerified: response.isVerified 
+                });
           },
           error: (error) => {
             this.userService
-                .publishUserDetails({ loggedIn: false, userName: '' });
+                .publishUserDetails({ loggedIn: false, username: '' });
           }
         })
   }

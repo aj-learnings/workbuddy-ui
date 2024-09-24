@@ -1,4 +1,5 @@
 export type UserDetails = {
-    userName?: string;
+    username?: string;
     loggedIn: boolean;
+    isVerified?: boolean;
 };

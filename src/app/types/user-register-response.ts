@@ -1,3 +1,4 @@
 export type UserRegisterResponse = {
-    userName: string;
+    username: string;
+    isVerified: string;
 }

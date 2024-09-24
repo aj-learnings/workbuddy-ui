@@ -1,3 +1,4 @@
 export type VerifyUserResponse = {
-    userName: string;
+    username: string;
+    isVerified: boolean;
 }
