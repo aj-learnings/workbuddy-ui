@@ -64,11 +64,6 @@ export class HomeComponent implements OnInit {
     this.fetchingWorkItems = true;
     this.verify();
     this.fetchAllWorkItems();
-    this.userService
-        .user$
-        .subscribe((userDetails: UserDetails) => {
-          this.userDetails = userDetails;
-        });
     this.searchService
         .search$
         .subscribe((searchDetails: SearchDetails) => {
@@ -81,6 +76,20 @@ export class HomeComponent implements OnInit {
         .alert$
         .subscribe((alertDetails: AlertDetails) => {
           this.alertDetails = alertDetails;
+        });
+    this.userService
+        .user$
+        .subscribe((userDetails: UserDetails) => {
+          this.userDetails = userDetails;
+          if (this.userDetails?.loggedIn && !this.userDetails?.isVerified) {
+            this.alertService
+                .publishAlertValue({ 
+                  title: 'Pending!', 
+                  message: `Please verify your email`, 
+                  class: 'warning', 
+                  show: true 
+                });
+          }
         });
   }
 

@@ -80,6 +80,16 @@ export class ViewComponent implements OnInit, OnChanges {
           });
       return;
     }
+    if (this.userDetails?.loggedIn && !this.userDetails?.isVerified) {
+      this.alertService
+          .publishAlertValue({ 
+            title: 'Pending!', 
+            message: `Please verify your email`, 
+            class: 'warning', 
+            show: true 
+          });
+      return;
+    }
     this.itemClickedEmitter.emit({ exist: false })
   }
 

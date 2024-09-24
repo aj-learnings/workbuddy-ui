@@ -202,6 +202,16 @@ export class EditComponent implements OnChanges {
           });
       return;
     }
+    if (this.userDetails?.loggedIn && !this.userDetails?.isVerified) {
+      this.alertService
+          .publishAlertValue({ 
+            title: 'Pending!', 
+            message: `Please verify your email`, 
+            class: 'warning', 
+            show: true 
+          });
+      return;
+    }
     this.showAddCommentSection = true;
   }
   
@@ -321,6 +331,16 @@ export class EditComponent implements OnChanges {
             title: 'Oops!', 
             message: `Please login to ${userReaction} a comment`, 
             class: 'danger', 
+            show: true 
+          });
+      return;
+    }
+    if (this.userDetails?.loggedIn && !this.userDetails?.isVerified) {
+      this.alertService
+          .publishAlertValue({ 
+            title: 'Pending!', 
+            message: `Please verify your email`, 
+            class: 'warning', 
             show: true 
           });
       return;
