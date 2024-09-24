@@ -32,7 +32,7 @@ export class LoginComponent {
   ) {
     this.inputForm = this.formBuilder.group({
       username: new FormControl('', [Validators.required]),
-      email: new FormControl('', [Validators.email]),
+      email: new FormControl('', [Validators.required, Validators.email]),
       password: new FormControl('', [Validators.required]),
     });
   }
@@ -79,12 +79,6 @@ export class LoginComponent {
         .subscribe({
           next: (response: UserLoginResponse) => {
             localStorage.setItem('token', response.token);
-            this.userService
-                .publishUserDetails({ 
-                  loggedIn: true, 
-                  username: response.username,
-                  isVerified: response.isVerified });
-            this.close();
             this.alertService
                 .publishAlertValue({ 
                   title: 'Awesome!', 
@@ -92,6 +86,13 @@ export class LoginComponent {
                   class: 'success', 
                   show: true 
                 });
+            this.userService
+                .publishUserDetails({ 
+                  loggedIn: true, 
+                  username: response.username,
+                  isVerified: response.isVerified 
+                });
+            this.close();
           },
           error: (error) => {
             this.errorMessage = error.error.message;

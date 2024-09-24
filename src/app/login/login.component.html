@@ -18,22 +18,30 @@
         </div>
         <div class="modal-body">
             <form [formGroup]="inputForm">
-                <div class="form-floating mb-2">
-                    <input type="name" class="form-control" id="floatingInput" 
-                      formControlName="userName" placeholder="Username"
-                      [ngClass]="{'is-invalid': inputForm.get('userName')?.invalid && inputForm.get('userName')?.touched}">
-                    <label for="floatingInput">Username*</label>
-                </div>
-                <div class="form-floating">
-                    <input type="password" class="form-control" id="floatingPassword" 
-                      formControlName="password" placeholder="Password"
-                      [ngClass]="{'is-invalid': inputForm.get('password')?.invalid && inputForm.get('password')?.touched}">
-                    <label for="floatingPassword">Password*</label>
-                </div>
+              <div class="form-floating mb-3" *ngIf="registerUser">
+                <input type="email" class="form-control" id="floatingInput" 
+                  formControlName="email" placeholder="name@example.com"
+                  [ngClass]="{'is-invalid': inputForm.get('email')?.invalid && inputForm.get('email')?.touched}">
+                <label for="floatingInput">Email*</label>
+              </div>
+              <div class="form-floating mb-2">
+                <input type="name" class="form-control" id="floatingInput" 
+                  formControlName="username" placeholder="Username"
+                  [ngClass]="{'is-invalid': inputForm.get('username')?.invalid && inputForm.get('username')?.touched}">
+                <label for="floatingInput"> {{ registerUser ? 'Username*' : 'Username/Email*' }} </label>
+              </div>
+              <div class="form-floating">
+                <input type="password" class="form-control" id="floatingPassword" 
+                  formControlName="password" placeholder="Password"
+                  [ngClass]="{'is-invalid': inputForm.get('password')?.invalid && inputForm.get('password')?.touched}">
+                <label for="floatingPassword">Password*</label>
+              </div>
             </form>
           </div>
         <div class="modal-footer">
-          <button type="submit" [disabled]="inputForm.invalid" data-bs-dismiss="modal" class="btn btn-primary" (click)="registerUser ? register() : login()">
+          <button type="submit" [disabled]="(registerUser && inputForm.invalid) || (!registerUser && (inputForm.get('username')?.invalid || inputForm.get('password')?.invalid))" 
+            data-bs-dismiss="modal" class="btn btn-primary" 
+              (click)="registerUser ? register() : login()">
             {{ registerUser ? 'Register' : 'Login' }}
           </button>
           <button type="button" class="btn btn-secondary" (click)="close()">Cancel</button>
