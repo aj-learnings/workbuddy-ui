@@ -1,0 +1,16 @@
+<div class="modal show d-block" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title text-dark" id="exampleModalLabel"> Email Verification </h5>
+          <button type="button" class="btn-close" aria-label="Close" (click)="close()"></button>
+        </div>
+        <div class="modal-body">
+          <div class="message text-{{messageClass}}">
+            {{ message }}
+          </div>
+          <ng-otp-input class="text-center" (onInputChange)="onOtpChange($event)" [config]="config"></ng-otp-input>
+          </div>
+      </div>
+    </div>
+</div>
