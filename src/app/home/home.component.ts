@@ -17,6 +17,7 @@ import { VerifyUserResponse } from '../types/verify-user-response';
 import { UserService } from '../services/shared/user.service';
 import { UserDetails } from '../types/user-details';
 import { ErrorHandlerService } from '../services/error-handler.service';
+import { OtpComponent } from '../common/otp/otp.component';
 
 @Component({
   selector: 'app-home',
@@ -26,6 +27,7 @@ import { ErrorHandlerService } from '../services/error-handler.service';
     CommonModule,
     WorkItemAddComponent,
     WorkItemEditComponent,
+    OtpComponent,
   ],
   templateUrl: './home.component.html',
   styleUrl: './home.component.scss',
@@ -53,6 +55,8 @@ export class HomeComponent implements OnInit {
   showAddItem: boolean = false;
   showEditItem: boolean = false;
   leftPanelWidth: number = 100;
+
+  showOtpSection: boolean = false;
 
   workItems: WorkItem[] = [];
   filteredWorkItems: WorkItem[] = [];
@@ -182,5 +186,15 @@ export class HomeComponent implements OnInit {
 
   closeAlert() {
     this.alertDetails.show = false;
+  }
+
+  handleEmailVerification() {
+    this.showOtpSection = true;
+  }
+
+  closeOtpSection(event: boolean) {
+    if (event) {
+      this.showOtpSection = false;
+    }
   }
 }

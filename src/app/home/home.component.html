@@ -2,6 +2,7 @@
   <div class="alert-message d-flex gap-1">
     <div class="title"><strong> {{ alertDetails.title }} </strong></div>
     <div class="message"> {{ alertDetails.message }} </div>
+    <a class="email-verification" *ngIf="alertDetails.message.includes('email') && alertDetails.message.includes('verif')" (click)="handleEmailVerification()">here</a>
   </div>
   <button type="button" class="btn-close close" data-bs-dismiss="alert" 
     aria-label="Close" (click)="closeAlert()"> 
@@ -34,3 +35,4 @@
     </div>
   </ng-template>
 </div>
+<app-otp *ngIf="showOtpSection" [userDetails]="userDetails" (closeEmitter)="closeOtpSection($event)"></app-otp>

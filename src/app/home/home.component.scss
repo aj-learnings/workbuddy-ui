@@ -6,6 +6,11 @@
   height: 45px;
   display: flex;
   align-items: center;
+  .alert-message {
+    .email-verification {
+      cursor: pointer;
+    }
+  }
   .close {
     margin-top: -4px;
   }
