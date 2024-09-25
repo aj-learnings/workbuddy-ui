@@ -19,7 +19,7 @@ export class AuthInterceptor implements HttpInterceptor  {
       }
     }
 
-    const requiresAuth = (request.method !== 'GET' && !request.url.includes('login') && !request.url.includes('signup')) || (request.method === 'GET' && request.url.includes('verify'));
+    const requiresAuth = (request.method !== 'GET' && !request.url.includes('login') && !request.url.includes('signup')) || (request.method === 'GET' && request.url.includes('verif'));
     if (requiresAuth && token) {
       request = request.clone({
         setHeaders: {
